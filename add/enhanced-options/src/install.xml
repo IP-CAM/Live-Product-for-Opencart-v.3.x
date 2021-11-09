@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+This file is subject to the terms and conditions defined in the "LICENSE.txt"
+file, which is part of this source code package and is also available on the
+page: https://raw.githubusercontent.com/ocmod-space/license/main/LICENSE.txt.
+-->
+
+<modification>
+	<name>#ocmod.space | Live Product + Enhanced Options</name>
+	<code>live-product--enhanced-options</code>
+	<version>1.5.0</version>
+	<author>Andrii Burkatskyi aka underr</author>
+	<link>https://www.opencart.com/index.php?route=marketplace/extension&amp;filter_member=ocmod.space</link>
+
+	<file path="catalog/controller/extension/module/live_product.php" error="log">
+		<operation error="log">
+			<search info="">
+				<![CDATA[isset($this->settings['text'][$language_id])]]>
+			</search>
+			<add position="before">
+				<![CDATA[			/// << Enhanced Options+
+			$eo_status = $this->config->get('module_enhanced_options_status');
+			$eo_settings = $this->config->get('module_enhanced_options');
+
+			$this->flexible_options = $eo_status ? $eo_settings['flexible_options'] : false;
+			$this->notices = $eo_status ? $eo_settings['notices'] : false;
+			$this->flat_rate = $eo_status ? $eo_settings['flat_rate'] : false;
+
+			if ($eo_status) {
+				foreach ($eo_settings['text'][$language_id] as $key => $value) {
+					$this->{'text_' . $key} = $value;
+				}
+			}
+			/// >> Enhanced Options+]]>
+			</add>
+		</operation>
+		<operation error="log">
+			<search info="">
+				<![CDATA[$price = (float)$product_info['price'];]]>
+			</search>
+			<add position="after">
+				<![CDATA[			$co = 1;  /// Enhanced Options+]]>
+			</add>
+		</operation>
+		<operation error="log">
+			<search info="">
+				<![CDATA[$special = (float)$product_info['special'];]]>
+			</search>
+			<add position="after">
+				<![CDATA[				$co = $this->flexible_options ? $special / $price : 1;  /// Enhanced Options+]]>
+			</add>
+		</operation>
+		<operation error="log">
+			<search info="">
+				<![CDATA[dtotal[(int)$discount['quantity']] = 0;]]>
+			</search>
+			<add position="after">
+				<![CDATA[					$discount['co'] = $this->flexible_options ? $discount['price'] / $product_info['price'] : 1,  /// Enhanced Options+]]>
+			</add>
+		</operation>
+		<operation error="log">
+			<search info="">
+				<![CDATA[$dqty = $discount['quantity'];]]>
+			</search>
+			<add position="after">
+				<![CDATA[						$co = $this->flexible_options ? $price / $product_info['price'] : 1;  /// Enhanced Options+]]>
+			</add>
+		</operation>
+
+		<operation error="log">
+			<search index="0" info="">
+				<![CDATA[$oprice = (float)$pov['price'];]]>
+			</search>
+			<add position="after">
+				<![CDATA[							$oprice *= $dqty ? $co : 1;  /// Enhanced Options+]]>
+				<!-- <![CDATA[							$oprice *= ($co != 1) ? $co : 1;  /// Enhanced Options+]]> -->
+			</add>
+		</operation>
+
+		<operation error="log" info="free">
+			<search info="">
+				<![CDATA[if ($pricepfx == '=') {]]>
+			</search>
+			<add position="after">
+				<![CDATA[										$is_free_option = true;  /// << Enhanced Options+]]>
+			</add>
+		</operation>
+
+		<operation error="log">
+			<search info="">
+				<![CDATA[$pointspfx = $pov['points_prefix'];]]>
+			</search>
+			<add position="after">
+				<![CDATA[							$ooldprice = false;  /// Enhanced Options+
+							$is_free_option = false;  /// Enhanced Options+]]>
+			</add>
+		</operation>
+
+		<operation error="log">
+			<search info="">
+				<![CDATA[$otax = $config_tax ? 'P' : false;]]>
+			</search>
+			<add position="after">
+				<![CDATA[								/// << Enhanced Options+
+								if (isset($pov['oldprice'])) {
+									$ooldprice = $this->currency->format(
+										$this->tax->calculate($oprice / $co, $product_info['tax_class_id'], $otax),
+										$this->session->data['currency']
+									);
+
+									$ooldprice = $pricepfx . $ooldprice;
+								}
+								/// >> Enhanced Options+]]>
+			</add>
+		</operation>
+
+		<operation error="log" info="free/preorder/original/sale">
+			<search info="">
+				<![CDATA[$selected = $this->isSelected(]]>
+			</search>
+			<add position="before">
+				<![CDATA[							/// << Enhanced Options+
+							if (!$this->hide_price) {
+								if ($ooldprice && $oprice && $this->text_oldprice) {
+									if ('select' == $po['type']) {
+										$pov_data[] = array(
+											'name'                    => $pov['name'],
+											'option_value_id'         => $pov['option_value_id'],
+											'points'                  => $opoints,
+											'points_prefix'           => $pointspfx,
+											'price'                   => $ooldprice . ' - ' . $this->text_oldprice,
+											'price_prefix'            => $pricepfx,
+											'product_option_value_id' => $pov['product_option_value_id'] . '-disabled',
+										);
+
+										if ($this->text_new_price) {
+											$oprice = $oprice .  ' - ' . $this->text_new_price;
+										}
+									} elseif ('checkbox' == $po['type'] || 'radio' == $po['type']) {
+										$oprice .= ' <span class="option-oldprice" style="text-decoration:line-through;">' .
+											$ooldprice . '</span>';
+									}
+								}
+
+								if ($is_free_option && $this->notices && $this->text_free_option) {
+									$oprice = $this->text_free_option;
+								}
+							}
+
+							if (!$osubtract
+								&& $oqty == 0
+								&& !$is_free_option
+								&& $this->notices
+								&& $this->text_preorder_option
+							) {
+								$oprice .= ', ' . $this->text_preorder_option;
+							}
+							/// >> Enhanced Options+]]>
+			</add>
+		</operation>
+
+		<operation error="log">
+			<search info="">
+				<![CDATA[=> $oprice,]]>
+			</search>
+			<add position="after">
+				<![CDATA[								'oldprice'          => $ooldprice, /// Enhanced Options+]]>
+			</add>
+		</operation>
+
+		<!-- <operation error="log">
+			<search info="">
+				<![CDATA[($this->hide_price || !$oprice) ? '' : $pricepfx . $oprice]]>
+			</search>
+			<add position="replace">
+				<![CDATA[($this->hide_price || !$oprice) ? '' : $pricepfx . $oprice . ((!$ooldprice || $po['type'] == 'select') ? '' : ' <span class="option-price-old" style="text-decoration:line-through;">' . $ooldprice . '</span>')]]>
+			</add>
+		</operation> -->
+
+		<operation error="log">
+			<search info="">
+				<![CDATA[$oprice_total, $oprice, $pricepfx]]>
+			</search>
+			<add position="replace">
+				<![CDATA[$oprice_total, $oprice / $co, $pricepfx]]>
+			</add>
+		</operation>
+
+		<operation error="log">
+			<search info="">
+				<![CDATA[$dprice_total[$d['quantity']], $oprice, $pricepfx]]>
+			</search>
+			<add position="replace">
+				<![CDATA[$dprice_total[$d['quantity']], $oprice * $d['co'], $pricepfx]]>
+			</add>
+		</operation>
+
+		<operation error="log">
+			<search info="">
+				<![CDATA[$ospecial_total, $oprice, $pricepfx]]>
+			</search>
+			<add position="replace">
+				<![CDATA[$ospecial_total, $dqty ? $oprice * $co : $oprice, $pricepfx]]>
+			</add>
+		</operation>
+	</file>
+
+	<file path="catalog/controller/extension/module/live_product.php" error="log">
+		<operation error="log">
+			<search>
+				<![CDATA[foreach ($product_options as $po) {]]>
+			</search>
+			<add position="after">
+				<![CDATA[					/// << Enhanced Options+(flat rate)
+					if ($this->flat_rate && isset($po['flat_rate'])) {
+						$is_flat_rate = $po['flat_rate'];
+					} else {
+						$is_flat_rate = false;
+					}
+					/// >> Enhanced Options+(flat rate)]]>
+			</add>
+		</operation>
+		<operation error="log">
+			<search>
+				<![CDATA[if ($this->product_total && $this->option_total) {]]>
+			</search>
+			<add position="replace">
+				<![CDATA[if ($this->product_total && $this->option_total && !$is_flat_rate) {  /// Enhanced Options+(flat rate)]]>
+			</add>
+		</operation>
+
+		<operation error="log">
+			<search>
+				<![CDATA[if (is_array($post_option))]]>
+			</search>
+			<add position="before">
+				<![CDATA[								/// << Enhanced Options+(flat rate)
+								if ($is_flat_rate) {
+									$oprice /= $qty;
+									$opoints = round($opoints / $qty);
+								}
+								/// >> Enhanced Options+(flat rate)]]>
+			</add>
+		</operation>
+
+		<operation error="log">
+			<search>
+				<![CDATA[=> $po['required'],]]>
+			</search>
+			<add position="after">
+				<![CDATA[						'flat_rate'           => isset($po['flat_rate']) ? $po['flat_rate'] : false, /// Ehanced Options+(flat rate)]]>
+			</add>
+		</operation>
+	</file>
+</modification>

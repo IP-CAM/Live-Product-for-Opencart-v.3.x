@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+This file is subject to the terms and conditions defined in the "LICENSE.txt"
+file, which is part of this source code package and is also available on the
+page: https://raw.githubusercontent.com/ocmod-space/license/main/LICENSE.txt.
+-->
+
+<modification>
+	<name>#ocmod.space | !Live Product + Journal3</name>
+	<code>live-product--journal3</code>
+	<version>1.2.0</version>
+	<author>Andrii Burkatskyi aka underr</author>
+	<link>https://www.opencart.com/index.php?route=marketplace/extension&amp;filter_member=ocmod.space</link>
+
+	<file path="admin/controller/extension/module/live_product.php" error="log">
+		<operation error="log" info="Journal 3">
+			<search>
+				<![CDATA['content']]>
+			</search>
+			<add position="replace">
+				<![CDATA['product']]>
+			</add>
+		</operation>
+	</file>
+
+	<file path="catalog/view/theme/journal3/template/product/product.twig" error="log">
+		<operation error="log" info="Journal 3">
+			<search>
+				<![CDATA[id="product-quantity"]]>
+			</search>
+			<add position="replace">
+				<![CDATA[autocomplete="off" id="product-quantity"]]>
+			</add>
+		</operation>
+	</file>
+
+	<file path="catalog/view/theme/journal3/template/product/product.twig" error="log">
+		<operation error="log" info="color swatches compatibility fix">
+			<search>
+				<![CDATA[<span>{{ product_weight }}</span>]]>
+			</search>
+			<add position="replace">
+				<![CDATA[{% if live_product.status and live_product.weight_total %}<span id="{{ live_product.id.weight_id }}"></span>{% else %}{{ product_weight }}{% endif %}]]>
+			</add>
+		</operation>
+	</file>
+
+	<file path="catalog/view/theme/journal3/template/product/product.twig" error="log">
+		<operation error="log" info="color swatches compatibility fix">
+			<search>
+				<![CDATA[title="{{ option_value.name }} {% if option_value.price and optionPrice %} ({{ option_value.price_prefix }}{{ option_value.price }}) {% endif %}"]]>
+			</search>
+			<add position="replace">
+				<![CDATA[title="{{ option_value.name }} {% if option_value.price and optionPrice %} ({{ option_value.price_prefix }}{{  option_value.price  }}) {% endif %}"]]>
+			</add>
+		</operation>
+	</file>
+
+</modification>
