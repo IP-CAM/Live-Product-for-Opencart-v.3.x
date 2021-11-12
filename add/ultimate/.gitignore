@@ -1,7 +1,6 @@
-doc/*.bb
-doc/*.odt
 pic
 src
 zip
+*.bb
 *.code-workspace
 *.pwd
