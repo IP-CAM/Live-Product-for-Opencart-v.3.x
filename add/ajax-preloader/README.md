@@ -1,4 +1,4 @@
-# [Addon] Live Product + Ajax Preloader
+# [Addon] Live Product < Ajax Preloader
 
 ## Description
 An addon for displaying a little circle animation during price update.
