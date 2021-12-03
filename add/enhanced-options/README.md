@@ -1,4 +1,4 @@
-# [Addon] Live Product + Enhanced Options
+# [Addon] Live Product < Enhanced Options
 
 ## Description
 An addon for linking the extensions Live Product and Enhanced Options.
