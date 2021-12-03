@@ -1,4 +1,4 @@
-# [Addon] Live Product Ultimate + Error Stock
+# [Addon] Live Product Ultimate < Error Stock
 
 ## Description
 
