@@ -1,4 +1,4 @@
-# [Addon] Live Product + So-Emarket template
+# [Addon] Live Product > So-Emarket
 
 ## Description
 An addon to linking the Live Product extension and So-Emarket templates
