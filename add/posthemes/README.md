@@ -1,4 +1,4 @@
-# [Addon] Live Product + Pos
+# [Addon] Live Product > posthemes
 
 ## Description
 An addon for linking the Live Product extension and [posthemes](https://themeforest.net/collections/5040952-responsive-opencart-themes) templates

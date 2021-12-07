@@ -1,4 +1,4 @@
-# [Addon] Live Product + Price Range Free
+# [Addon] Live Product < Price Range Free
 
 ## Description
 An addon for linking the extensions Live Product and Price Range Free.

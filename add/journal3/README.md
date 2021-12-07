@@ -1,4 +1,4 @@
-# [Addon] Live Product + Journal3
+# [Addon] Live Product > Journal3
 
 ## Description
 An addon for linking the Live Product extension and Journal 3 themplate.

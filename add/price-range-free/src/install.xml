@@ -7,7 +7,7 @@ page: https://raw.githubusercontent.com/ocmod-space/license/main/LICENSE.txt.
 -->
 
 <modification>
-	<name>#ocmod.space | Live Product + Price Range Free</name>
+	<name>#ocmod.space | Live Product &lt;Price Range Free</name>
 	<code>live-product--price-range-free</code>
 	<version>1.1.0</version>
 	<author>Andrii Burkatskyi aka underr</author>

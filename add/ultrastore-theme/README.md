@@ -1,4 +1,4 @@
-# [Addon] Live Product + UltraStore
+# [Addon] Live Product > UltraStore
 
 ## Description
 An addon for linking the Live Product extension and [UltraStore](https://market.octemplates.net/templates/ultrastore) template.
