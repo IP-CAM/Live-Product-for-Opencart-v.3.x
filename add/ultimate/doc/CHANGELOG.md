@@ -1,5 +1,8 @@
 # Change log
 
+## [3.4.1] - 2022.01.04:
+### Minor improvement
+
 ## [3.4.0] - 2021.11.09:
 ### Internal
 - Code refactoring
