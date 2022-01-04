@@ -2,7 +2,7 @@
 
 ## Description
 The "Live Product" extension allows to dynamically update price on the product page depending on selected product options or quantity.
-The extension is compatible with OpenCart versions 2.3-3.x.
+The extension is compatible with OpenCart versions 2.2.x-3.0.x.
 
 ## Features
 * Dynamically updates price on the product page depending on selected product options or quantity.
