@@ -232,7 +232,7 @@ page: https://raw.githubusercontent.com/ocmod-space/license/main/LICENSE.txt.
 	<file path="catalog/controller/extension/module/live_product.php" error="log" info="radio button hints">
 		<operation error="log">
 			<search>
-				<![CDATA[var g_option_id;]]>
+				<![CDATA[var g_option_id]]>
 			</search>
 			<add position="after">
 				<![CDATA[var popup = '#one-click-main-block';]]>
